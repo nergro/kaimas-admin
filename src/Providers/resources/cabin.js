@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { stringify } from 'query-string';
-import { DELETE, GET_LIST, GET_ONE, CREATE, UPDATE, DELETE_MANY } from 'react-admin';
+import { DELETE, GET_LIST, GET_ONE, CREATE, UPDATE, DELETE_MANY, GET_MANY } from 'react-admin';
 
 const uploadImage = formData =>
   axios.post('https://api.cloudinary.com/v1_1/dmckzsz3u/image/upload', formData, {
@@ -52,6 +52,12 @@ export const cabin = async (type, params, resource) => {
       return {
         data: { id, name, description, capacity, price, images: images.map(x => ({ url: x })) },
       };
+    }
+    case GET_MANY: {
+      const {
+        data: { items },
+      } = await axios.get(`/cabin`);
+      return { data: items };
     }
     case CREATE: {
       try {
