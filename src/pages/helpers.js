@@ -3,7 +3,7 @@ import React from 'react';
 export const SectionTitle = ({ action, record }) => {
   return (
     <span>
-      {action} {record ? `"${record.email}"` : ''}
+      {action} {record ? `"${record.name}"` : ''}
     </span>
   );
 };

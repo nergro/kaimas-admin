@@ -1,9 +1,9 @@
-import { user } from './resources';
+import { cabin } from './resources';
 
 const actions = async (type, resource, params) => {
   switch (resource) {
-    case 'user': {
-      return user(type, params, resource);
+    case 'cabin': {
+      return cabin(type, params, resource);
     }
     default:
       throw new Error(`Unsupported fetch action type ${type}`);

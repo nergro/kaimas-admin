@@ -1,3 +1,3 @@
-import * as users from './Users';
+import * as cabins from './Cabins';
 
-export { users };
+export { cabins };

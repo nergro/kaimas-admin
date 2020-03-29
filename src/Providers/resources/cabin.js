@@ -1,0 +1,125 @@
+import axios from 'axios';
+import { stringify } from 'query-string';
+import { DELETE, GET_LIST, GET_ONE, CREATE, UPDATE, DELETE_MANY } from 'react-admin';
+
+const uploadImage = formData =>
+  axios.post('https://api.cloudinary.com/v1_1/dmckzsz3u/image/upload', formData, {
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+  });
+
+const getFormData = (image, location) => {
+  const formData = new FormData();
+  const uniqueFileName = image.name + '-' + new Date().toISOString();
+
+  formData.append('file', image);
+  formData.append('tags', 'cabins');
+  formData.append('upload_preset', 'crorr0g4');
+  formData.append('api_key', '175283364765328');
+  formData.append('timestamp', (Date.now() / 1000) | 0);
+  formData.append('public_id', `${location}/${uniqueFileName}`);
+  return formData;
+};
+
+export const cabin = async (type, params, resource) => {
+  switch (type) {
+    case GET_LIST: {
+      const { page, perPage } = params.pagination;
+      const { field, order } = params.sort;
+      const query = {
+        sort: field,
+        order,
+        page,
+        perPage,
+      };
+
+      const url = `/${resource}?${stringify(query)}`;
+      const {
+        data: { items, total },
+      } = await axios.get(url);
+
+      return {
+        data: items,
+        total: total,
+      };
+    }
+    case GET_ONE: {
+      const {
+        data: { id, name, description, capacity, price, images },
+      } = await axios.get(`/cabin/${params.id}`);
+
+      return {
+        data: { id, name, description, capacity, price, images: images.map(x => ({ url: x })) },
+      };
+    }
+    case CREATE: {
+      try {
+        const { name, description, capacity, price, images } = params.data;
+
+        const uploadedImagesData = await Promise.all(
+          images.map(image => uploadImage(getFormData(image.rawFile, 'cabins')))
+        );
+
+        const uploadedImages = uploadedImagesData.map(image => ({
+          imageUrl: image.data.secure_url,
+          imageId: image.data.public_id,
+        }));
+
+        const { data } = await axios.post('/cabin', {
+          name,
+          description,
+          capacity,
+          price,
+          images: uploadedImages,
+        });
+
+        return { data };
+      } catch (error) {
+        if (error.response) {
+          throw new Error(error.response.data.error);
+        }
+        throw new Error('Server error');
+      }
+    }
+    case UPDATE: {
+      try {
+        const { id, name, description, capacity, price, images } = params.data;
+
+        const uploadedImagesData = await Promise.all(
+          images.map(image => uploadImage(getFormData(image.rawFile, 'cabins')))
+        );
+
+        const uploadedImages = uploadedImagesData.map(image => ({
+          imageUrl: image.data.secure_url,
+          imageId: image.data.public_id,
+        }));
+
+        await axios.put(`/cabin/${id}`, {
+          name,
+          description,
+          capacity,
+          price,
+          images: uploadedImages,
+        });
+
+        return { data: params };
+      } catch (err) {
+        console.log(err);
+        throw new Error('Server error');
+      }
+    }
+    case DELETE: {
+      const { id } = params;
+      const { data } = await axios.delete(`/cabin/${id}`);
+      return { data };
+    }
+    case DELETE_MANY: {
+      const { ids } = params;
+      await axios.delete(`/cabin`, { data: { ids } });
+      return { data: ids };
+    }
+    default:
+      throw new Error(`Unsupported fetch action type ${type}`);
+  }
+};

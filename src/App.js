@@ -1,23 +1,19 @@
 import React from 'react';
 import { Admin, Resource } from 'react-admin';
 import dataProvider from 'Providers/dataProvider';
-import authProvider from 'Providers/authProvider';
 import { AccountBox } from '@material-ui/icons';
-import { users } from './pages';
+import { cabins } from './pages';
 
 const App = () => {
   return (
-    <Admin
-      dataProvider={dataProvider}
-      // authProvider={authProvider}
-    >
+    <Admin dataProvider={dataProvider}>
       <Resource
-        name="user"
+        name="cabin"
         icon={AccountBox}
-        list={users.List}
-        show={users.Show}
-        edit={users.Edit}
-        create={users.Create}
+        list={cabins.List}
+        show={cabins.Show}
+        edit={cabins.Edit}
+        create={cabins.Create}
       />
     </Admin>
   );
