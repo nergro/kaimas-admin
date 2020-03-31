@@ -2,7 +2,7 @@ import axios from 'axios';
 import { stringify } from 'query-string';
 import { DELETE, GET_LIST, GET_ONE, CREATE, UPDATE, DELETE_MANY } from 'react-admin';
 
-export const availableDate = async (type, params, resource) => {
+export const benefit = async (type, params, resource) => {
   switch (type) {
     case GET_LIST: {
       const { page, perPage } = params.pagination;
@@ -26,16 +26,16 @@ export const availableDate = async (type, params, resource) => {
     }
     case GET_ONE: {
       const {
-        data: { id, serviceId, date, onModel },
-      } = await axios.get(`/availabledate/${params.id}`);
+        data: { id, serviceId, description, onModel },
+      } = await axios.get(`/benefit/${params.id}`);
 
       return {
-        data: { id, serviceId, date, onModel },
+        data: { id, serviceId, description, onModel },
       };
     }
     case CREATE: {
       try {
-        // const { name, description, capacity, price } = params.data;
+        const { serviceId, description, onModel } = params.data;
 
         // const { data } = await axios.post('/cabin', {
         //   name,
@@ -73,12 +73,12 @@ export const availableDate = async (type, params, resource) => {
     }
     case DELETE: {
       const { id } = params;
-      const { data } = await axios.delete(`/cabin/${id}`);
+      const { data } = await axios.delete(`/benefit/${id}`);
       return { data };
     }
     case DELETE_MANY: {
       const { ids } = params;
-      await axios.delete(`/cabin`, { data: { ids } });
+      await axios.delete(`/benefit`, { data: { ids } });
       return { data: ids };
     }
     default:

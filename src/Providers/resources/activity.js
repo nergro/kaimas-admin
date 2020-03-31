@@ -14,7 +14,7 @@ const getFormData = (image, location) => {
   const uniqueFileName = image.name + '-' + new Date().toISOString();
 
   formData.append('file', image);
-  formData.append('tags', 'cabins');
+  formData.append('tags', 'activities');
   formData.append('upload_preset', 'crorr0g4');
   formData.append('api_key', '175283364765328');
   formData.append('timestamp', (Date.now() / 1000) | 0);
@@ -22,7 +22,7 @@ const getFormData = (image, location) => {
   return formData;
 };
 
-export const cabin = async (type, params, resource) => {
+export const activity = async (type, params, resource) => {
   switch (type) {
     case GET_LIST: {
       const { page, perPage } = params.pagination;
@@ -46,13 +46,14 @@ export const cabin = async (type, params, resource) => {
     }
     case GET_ONE: {
       const {
-        data: { id, name, description, capacity, price, images },
-      } = await axios.get(`/cabin/${params.id}`);
+        data: { id, name, category, description, capacity, price, images },
+      } = await axios.get(`/activity/${params.id}`);
 
       return {
         data: {
           id,
           name,
+          category,
           description,
           capacity,
           price,
@@ -68,10 +69,10 @@ export const cabin = async (type, params, resource) => {
     }
     case CREATE: {
       try {
-        const { name, description, capacity, price, images } = params.data;
+        const { name, category, description, capacity, price, images } = params.data;
 
         const uploadedImagesData = await Promise.all(
-          images.map(image => uploadImage(getFormData(image.rawFile, 'cabins')))
+          images.map(image => uploadImage(getFormData(image.rawFile, 'activities')))
         );
 
         const uploadedImages = uploadedImagesData.map(image => ({
@@ -79,8 +80,9 @@ export const cabin = async (type, params, resource) => {
           imageId: image.data.public_id,
         }));
 
-        const { data } = await axios.post('/cabin', {
+        const { data } = await axios.post('/activity', {
           name,
+          category,
           description,
           capacity,
           price,
@@ -97,7 +99,7 @@ export const cabin = async (type, params, resource) => {
     }
     case UPDATE: {
       try {
-        const { id, name, description, capacity, price, images } = params.data;
+        const { id, name, category, description, capacity, price, images } = params.data;
         const newImages = images.filter(image => image.rawFile);
         const oldImages = images.filter(image => !image.rawFile);
 
@@ -105,8 +107,9 @@ export const cabin = async (type, params, resource) => {
           imageUrl: image.imageUrl,
           imageId: image.imageId,
         }));
+
         const uploadedImagesData = await Promise.all(
-          newImages.map(image => uploadImage(getFormData(image.rawFile, 'cabins')))
+          newImages.map(image => uploadImage(getFormData(image.rawFile, 'activities')))
         );
 
         const uploadedImages = uploadedImagesData.map(image => ({
@@ -114,8 +117,9 @@ export const cabin = async (type, params, resource) => {
           imageId: image.data.public_id,
         }));
 
-        await axios.put(`/cabin/${id}`, {
+        await axios.put(`/activity/${id}`, {
           name,
+          category,
           description,
           capacity,
           price,
@@ -129,14 +133,22 @@ export const cabin = async (type, params, resource) => {
       }
     }
     case DELETE: {
-      const { id } = params;
-      const { data } = await axios.delete(`/cabin/${id}`);
-      return { data };
+      try {
+        const { id } = params;
+        const { data } = await axios.delete(`/activity/${id}`);
+        return { data };
+      } catch (error) {
+        throw new Error('Server error');
+      }
     }
     case DELETE_MANY: {
-      const { ids } = params;
-      await axios.delete(`/cabin`, { data: { ids } });
-      return { data: ids };
+      try {
+        const { ids } = params;
+        await axios.delete(`/activity`, { data: { ids } });
+        return { data: ids };
+      } catch (error) {
+        throw new Error('Server error');
+      }
     }
     default:
       throw new Error(`Unsupported fetch action type ${type}`);
