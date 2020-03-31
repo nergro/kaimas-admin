@@ -13,7 +13,6 @@ import {
   Edit as EditComp,
   ImageField,
   ImageInput,
-  ReferenceField,
   DateField,
   ReferenceInput,
   SelectInput,
@@ -36,15 +35,6 @@ export const List = props => {
       <Datagrid rowClick="show">
         <DateField source="date" />
         <TextField source="onModel" label="Service" />
-        <ReferenceField
-          label="Cabin Name"
-          source="serviceId"
-          reference="cabin"
-          allowEmpty={true}
-          link="show"
-        >
-          <TextField source="name" />
-        </ReferenceField>
         <EditButton />
       </Datagrid>
     </ListComp>
@@ -53,19 +43,10 @@ export const List = props => {
 
 export const Show = props => {
   return (
-    <ShowComp title={<SectionTitle action="Cabin" />} {...props}>
+    <ShowComp title={<SectionTitle action="AvailableDate" />} {...props}>
       <SimpleShowLayout>
         <DateField source="date" />
         <TextField source="onModel" label="Service" />
-        <ReferenceField
-          label="Cabin Name"
-          source="serviceId"
-          reference="cabin"
-          allowEmpty={true}
-          link="show"
-        >
-          <TextField source="name" />
-        </ReferenceField>
       </SimpleShowLayout>
     </ShowComp>
   );
@@ -78,14 +59,14 @@ export const Create = props => {
     { value: 'activity', label: 'Activity' },
   ];
 
-  const from = new Date();
-  from.setHours(from.getHours() + 1);
-  from.setMinutes(0);
-  from.setSeconds(0);
-  const to = new Date();
-  to.setHours(to.getHours() + 2);
-  to.setMinutes(0);
-  to.setSeconds(0);
+  const day = 60 * 60 * 24 * 1000;
+  const start = new Date();
+  start.setHours(0);
+  start.setMinutes(0);
+  start.setSeconds(0);
+
+  const from = new Date(start.getTime() + day);
+  const to = new Date(start.getTime() + day * 2);
 
   return (
     <CreateComponent props={props} redirect="list">
@@ -99,10 +80,19 @@ export const Create = props => {
         />
         <p>Service</p>
         {selectedService === 'cabin' ? (
-          <ReferenceInput label="Cabin" source="Cabin" reference="cabin" validate={[required()]}>
+          <ReferenceInput label="Cabin" source="cabin" reference="cabin" validate={[required()]}>
             <SelectInput optionText="name" />
           </ReferenceInput>
-        ) : null}
+        ) : (
+          <ReferenceInput
+            label="Activity"
+            source="activity"
+            reference="activity"
+            validate={[required()]}
+          >
+            <SelectInput optionText="name" />
+          </ReferenceInput>
+        )}
         <DateSelect
           source="from"
           placeholder="Select date and time "

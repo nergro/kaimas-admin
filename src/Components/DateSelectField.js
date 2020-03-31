@@ -45,12 +45,16 @@ class DateSelectField extends React.Component {
   render() {
     const { startDate } = this.state;
     const { placeholder, meta } = this.props;
+
+    const day = 60 * 60 * 24 * 1000;
+    const start = new Date();
+    const minDate = new Date(start.getTime() + day);
     return (
       <>
         <DateSelect
           onChange={date => this.onChange(date)}
           selected={startDate}
-          minDate={new Date()}
+          minDate={minDate}
           placeholderText={placeholder}
           dateFormat="MMMM d, yyyy"
         />

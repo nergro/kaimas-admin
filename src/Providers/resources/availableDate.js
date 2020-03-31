@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { stringify } from 'query-string';
 import { DELETE, GET_LIST, GET_ONE, CREATE, UPDATE, DELETE_MANY } from 'react-admin';
+import moment from 'moment';
 
 export const availableDate = async (type, params, resource) => {
   switch (type) {
@@ -35,19 +36,43 @@ export const availableDate = async (type, params, resource) => {
     }
     case CREATE: {
       try {
-        // const { name, description, capacity, price } = params.data;
+        const { from, to, cabin, activity } = params.data;
 
-        // const { data } = await axios.post('/cabin', {
-        //   name,
-        //   description,
-        //   capacity,
-        //   price,
-        // });
+        let serviceType = '';
+        let serviceId = '';
 
-        console.log(params.data);
+        if (cabin) {
+          serviceType = 'Cabin';
+          serviceId = cabin;
+        } else {
+          serviceType = 'Activity';
+          serviceId = activity;
+        }
 
-        return {};
+        const start = moment(from);
+        const end = moment(to);
+
+        const duration = moment.duration(end.diff(start));
+        const days = Math.round(duration.asDays());
+        console.log(days);
+
+        const dateChunks = [];
+
+        const day = 60 * 60 * 24 * 1000;
+
+        for (let i = 0; i < days; i++) {
+          dateChunks.push(new Date(from.getTime() + day * i));
+        }
+
+        const { data } = await axios.post('/availabledate', {
+          dateChunks,
+          serviceType,
+          serviceId,
+        });
+
+        return { data };
       } catch (error) {
+        console.log(error);
         if (error.response) {
           throw new Error(error.response.data.error);
         }

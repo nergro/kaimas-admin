@@ -46,9 +46,9 @@ export const cabin = async (type, params, resource) => {
     }
     case GET_ONE: {
       const {
-        data: { id, name, description, capacity, price, images },
+        data: { id, name, description, capacity, price, images, availableDates },
       } = await axios.get(`/cabin/${params.id}`);
-
+      console.log(availableDates);
       return {
         data: {
           id,
@@ -57,6 +57,7 @@ export const cabin = async (type, params, resource) => {
           capacity,
           price,
           images: images.map(x => ({ url: x.imageUrl, ...x })),
+          availableDates: availableDates,
         },
       };
     }

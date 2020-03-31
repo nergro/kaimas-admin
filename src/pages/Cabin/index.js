@@ -14,6 +14,11 @@ import {
   Edit as EditComp,
   ImageField,
   ImageInput,
+  ArrayField,
+  SingleFieldList,
+  ChipField,
+  ReferenceArrayField,
+  DateField,
 } from 'react-admin';
 
 import { SectionTitle } from '../helpers';
@@ -41,6 +46,11 @@ export const Show = props => {
         <NumberField source="price" />
         <NumberField source="capacity" />
         <ImageField source="images" src="url" title="desc" />
+        <ReferenceArrayField label="" reference="availableDate" source="availableDates">
+          <Datagrid rowClick="show" label="Dates">
+            <DateField source="date" />
+          </Datagrid>
+        </ReferenceArrayField>
       </SimpleShowLayout>
     </ShowComp>
   );
