@@ -2,7 +2,7 @@ import axios from 'axios';
 import { stringify } from 'query-string';
 import { DELETE, GET_LIST, GET_ONE, CREATE, UPDATE, DELETE_MANY, GET_MANY } from 'react-admin';
 
-const uploadImage = formData =>
+const uploadImage = (formData) =>
   axios.post('https://api.cloudinary.com/v1_1/dmckzsz3u/image/upload', formData, {
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
@@ -46,7 +46,17 @@ export const activity = async (type, params, resource) => {
     }
     case GET_ONE: {
       const {
-        data: { id, name, category, description, capacity, price, images },
+        data: {
+          id,
+          name,
+          category,
+          description,
+          capacity,
+          price,
+          images,
+          availableDates,
+          benefits,
+        },
       } = await axios.get(`/activity/${params.id}`);
 
       return {
@@ -57,7 +67,9 @@ export const activity = async (type, params, resource) => {
           description,
           capacity,
           price,
-          images: images.map(x => ({ url: x.imageUrl, ...x })),
+          images: images.map((x) => ({ url: x.imageUrl, ...x })),
+          availableDates,
+          benefits,
         },
       };
     }
@@ -69,17 +81,18 @@ export const activity = async (type, params, resource) => {
     }
     case CREATE: {
       try {
-        const { name, category, description, capacity, price, images } = params.data;
+        const { name, category, description, capacity, price, images, benefits } = params.data;
+        let uploadedImages = [];
+        if (images) {
+          const uploadedImagesData = await Promise.all(
+            images.map((image) => uploadImage(getFormData(image.rawFile, 'activities')))
+          );
 
-        const uploadedImagesData = await Promise.all(
-          images.map(image => uploadImage(getFormData(image.rawFile, 'activities')))
-        );
-
-        const uploadedImages = uploadedImagesData.map(image => ({
-          imageUrl: image.data.secure_url,
-          imageId: image.data.public_id,
-        }));
-
+          uploadedImages = uploadedImagesData.map((image) => ({
+            imageUrl: image.data.secure_url,
+            imageId: image.data.public_id,
+          }));
+        }
         const { data } = await axios.post('/activity', {
           name,
           category,
@@ -87,6 +100,7 @@ export const activity = async (type, params, resource) => {
           capacity,
           price,
           images: uploadedImages,
+          benefits,
         });
 
         return { data };
@@ -99,23 +113,27 @@ export const activity = async (type, params, resource) => {
     }
     case UPDATE: {
       try {
-        const { id, name, category, description, capacity, price, images } = params.data;
-        const newImages = images.filter(image => image.rawFile);
-        const oldImages = images.filter(image => !image.rawFile);
+        const { id, name, category, description, capacity, price, images, benefits } = params.data;
+        let uploadedImages = [];
+        let mappedOld = [];
+        if (images) {
+          const newImages = images.filter((image) => image.rawFile);
+          const oldImages = images.filter((image) => !image.rawFile);
 
-        const mappedOld = oldImages.map(image => ({
-          imageUrl: image.imageUrl,
-          imageId: image.imageId,
-        }));
+          mappedOld = oldImages.map((image) => ({
+            imageUrl: image.imageUrl,
+            imageId: image.imageId,
+          }));
 
-        const uploadedImagesData = await Promise.all(
-          newImages.map(image => uploadImage(getFormData(image.rawFile, 'activities')))
-        );
+          const uploadedImagesData = await Promise.all(
+            newImages.map((image) => uploadImage(getFormData(image.rawFile, 'activities')))
+          );
 
-        const uploadedImages = uploadedImagesData.map(image => ({
-          imageUrl: image.data.secure_url,
-          imageId: image.data.public_id,
-        }));
+          uploadedImages = uploadedImagesData.map((image) => ({
+            imageUrl: image.data.secure_url,
+            imageId: image.data.public_id,
+          }));
+        }
 
         await axios.put(`/activity/${id}`, {
           name,
@@ -124,6 +142,7 @@ export const activity = async (type, params, resource) => {
           capacity,
           price,
           images: [...mappedOld, ...uploadedImages],
+          benefits,
         });
 
         return { data: params };

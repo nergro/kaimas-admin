@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { stringify } from 'query-string';
-import { DELETE, GET_LIST, GET_ONE, CREATE, UPDATE, DELETE_MANY } from 'react-admin';
+import { DELETE, GET_LIST, GET_ONE, CREATE, UPDATE, DELETE_MANY, GET_MANY } from 'react-admin';
 
 export const benefit = async (type, params, resource) => {
   switch (type) {
@@ -26,27 +26,28 @@ export const benefit = async (type, params, resource) => {
     }
     case GET_ONE: {
       const {
-        data: { id, serviceId, description, onModel },
+        data: { id, description },
       } = await axios.get(`/benefit/${params.id}`);
 
       return {
-        data: { id, serviceId, description, onModel },
+        data: { id, description },
       };
+    }
+    case GET_MANY: {
+      const {
+        data: { items },
+      } = await axios.get(`/benefit`);
+      return { data: items };
     }
     case CREATE: {
       try {
-        const { serviceId, description, onModel } = params.data;
+        const { description } = params.data;
 
-        // const { data } = await axios.post('/cabin', {
-        //   name,
-        //   description,
-        //   capacity,
-        //   price,
-        // });
+        const { data } = await axios.post('/benefit', {
+          description,
+        });
 
-        console.log(params.data);
-
-        return {};
+        return { data };
       } catch (error) {
         if (error.response) {
           throw new Error(error.response.data.error);
@@ -56,13 +57,10 @@ export const benefit = async (type, params, resource) => {
     }
     case UPDATE: {
       try {
-        const { id, name, description, capacity, price } = params.data;
+        const { id, description } = params.data;
 
-        await axios.put(`/cabin/${id}`, {
-          name,
+        await axios.put(`/benefit/${id}`, {
           description,
-          capacity,
-          price,
         });
 
         return { data: params };

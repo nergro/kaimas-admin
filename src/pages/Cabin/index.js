@@ -14,17 +14,16 @@ import {
   Edit as EditComp,
   ImageField,
   ImageInput,
-  ArrayField,
-  SingleFieldList,
-  ChipField,
   ReferenceArrayField,
   DateField,
+  ReferenceArrayInput,
+  SelectArrayInput,
 } from 'react-admin';
 
 import { SectionTitle } from '../helpers';
 import { CreateComponent } from 'Components/CreateForm';
 
-export const List = props => {
+export const List = (props) => {
   return (
     <ListComp exporter={false} {...props}>
       <Datagrid rowClick="show">
@@ -37,7 +36,7 @@ export const List = props => {
   );
 };
 
-export const Show = props => {
+export const Show = (props) => {
   return (
     <ShowComp title={<SectionTitle action="Cabin" />} {...props}>
       <SimpleShowLayout>
@@ -47,8 +46,13 @@ export const Show = props => {
         <NumberField source="capacity" />
         <ImageField source="images" src="url" title="desc" />
         <ReferenceArrayField label="" reference="availableDate" source="availableDates">
-          <Datagrid rowClick="show" label="Dates">
-            <DateField source="date" />
+          <Datagrid rowClick="show">
+            <DateField source="date" label="Available dates" locales="lt-LT" />
+          </Datagrid>
+        </ReferenceArrayField>
+        <ReferenceArrayField label="" reference="benefit" source="benefits">
+          <Datagrid rowClick="show">
+            <TextField source="description" label="Benefits" />
           </Datagrid>
         </ReferenceArrayField>
       </SimpleShowLayout>
@@ -56,7 +60,7 @@ export const Show = props => {
   );
 };
 
-export const Create = props => {
+export const Create = (props) => {
   return (
     <CreateComponent props={props} redirect="list">
       <SimpleForm redirect="show">
@@ -67,12 +71,15 @@ export const Create = props => {
         <ImageInput source="images" label="Upload images" accept="image/*" multiple>
           <ImageField source="url" title="Images" />
         </ImageInput>
+        <ReferenceArrayInput label="Benefits" source="benefits" reference="benefit">
+          <SelectArrayInput optionText="description" />
+        </ReferenceArrayInput>
       </SimpleForm>
     </CreateComponent>
   );
 };
 
-export const Edit = props => {
+export const Edit = (props) => {
   return (
     <EditComp {...props} title={<SectionTitle action="Cabin" />}>
       <SimpleForm redirect="show">
@@ -83,6 +90,9 @@ export const Edit = props => {
         <ImageInput source="images" label="Upload images" accept="image/*" multiple>
           <ImageField source="url" title="Images" />
         </ImageInput>
+        <ReferenceArrayInput label="Benefits" source="benefits" reference="benefit">
+          <SelectArrayInput optionText="description" />
+        </ReferenceArrayInput>
       </SimpleForm>
     </EditComp>
   );

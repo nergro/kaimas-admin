@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { stringify } from 'query-string';
-import { DELETE, GET_LIST, GET_ONE, CREATE, UPDATE, DELETE_MANY } from 'react-admin';
+import { DELETE, GET_LIST, GET_ONE, CREATE, UPDATE, DELETE_MANY, GET_MANY } from 'react-admin';
 import moment from 'moment';
 
 export const availableDate = async (type, params, resource) => {
@@ -33,6 +33,12 @@ export const availableDate = async (type, params, resource) => {
       return {
         data: { id, serviceId, date, onModel },
       };
+    }
+    case GET_MANY: {
+      const {
+        data: { items },
+      } = await axios.get(`/availabledate`);
+      return { data: items };
     }
     case CREATE: {
       try {
