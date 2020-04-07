@@ -1,4 +1,12 @@
-import { cabin, availableDate, benefit, activity, activityCategory, manager } from './resources';
+import {
+  cabin,
+  availableDate,
+  benefit,
+  activity,
+  activityCategory,
+  manager,
+  newsletter,
+} from './resources';
 
 const actions = async (type, resource, params) => {
   switch (resource) {
@@ -19,6 +27,9 @@ const actions = async (type, resource, params) => {
     }
     case 'manager': {
       return manager(type, params, resource);
+    }
+    case 'newsletter': {
+      return newsletter(type, params, resource);
     }
     default:
       throw new Error(`Unsupported fetch action type ${type}`);

@@ -4,3 +4,4 @@ export { benefit } from './benefit';
 export { activity } from './activity';
 export { activityCategory } from './activityCategory';
 export { manager } from './manager';
+export { newsletter } from './newsletter';

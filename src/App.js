@@ -8,8 +8,17 @@ import {
   DirectionsRun,
   Category,
   SupervisorAccount,
+  Email,
 } from '@material-ui/icons';
-import { cabin, availableDate, benefit, activity, activityCategory, manager } from './pages';
+import {
+  cabin,
+  availableDate,
+  benefit,
+  activity,
+  activityCategory,
+  newsletter,
+  manager,
+} from './pages';
 
 const App = () => {
   return (
@@ -55,6 +64,13 @@ const App = () => {
         show={activityCategory.Show}
         edit={activityCategory.Edit}
         create={activityCategory.Create}
+      />
+      <Resource
+        name="newsletter"
+        icon={Email}
+        list={newsletter.List}
+        show={newsletter.Show}
+        create={newsletter.Create}
       />
       <Resource
         name="manager"

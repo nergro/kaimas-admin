@@ -1,9 +1,8 @@
 import axios from 'axios';
 import { stringify } from 'query-string';
 import { DELETE, GET_LIST, GET_ONE, CREATE, DELETE_MANY } from 'react-admin';
-import generator from 'generate-password';
 
-export const manager = async (type, params, resource) => {
+export const newsletter = async (type, params, resource) => {
   switch (type) {
     case GET_LIST: {
       const { page, perPage } = params.pagination;
@@ -15,7 +14,7 @@ export const manager = async (type, params, resource) => {
         perPage,
       };
 
-      const url = `/user?${stringify(query)}`;
+      const url = `/newsletter?${stringify(query)}`;
       const {
         data: { items, total },
       } = await axios.get(url);
@@ -27,25 +26,20 @@ export const manager = async (type, params, resource) => {
     }
     case GET_ONE: {
       const {
-        data: { id, name, lastName, email, phone },
-      } = await axios.get(`/user/${params.id}`);
+        data: { id, topic, content, date },
+      } = await axios.get(`/newsletter/${params.id}`);
 
       return {
-        data: { id, name, lastName, email, phone },
+        data: { id, topic, content, date },
       };
     }
     case CREATE: {
       try {
-        const { name, lastName, email, phone } = params.data;
+        const { topic, content } = params.data;
 
-        const generatedPassword = generator.generate({ length: 10, numbers: true });
-
-        const { data } = await axios.post('/user/createmanager', {
-          name,
-          lastName,
-          email,
-          phone,
-          password: generatedPassword,
+        const { data } = await axios.post('/newsletter', {
+          topic,
+          content,
         });
 
         return { data };
@@ -58,12 +52,12 @@ export const manager = async (type, params, resource) => {
     }
     case DELETE: {
       const { id } = params;
-      const { data } = await axios.delete(`/user/${id}`);
+      const { data } = await axios.delete(`/newsletter/${id}`);
       return { data };
     }
     case DELETE_MANY: {
       const { ids } = params;
-      await axios.delete(`/user`, { data: { ids } });
+      await axios.delete(`/newsletter`, { data: { ids } });
       return { data: ids };
     }
     default:
