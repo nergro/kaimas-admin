@@ -5,11 +5,9 @@ import {
   Datagrid,
   TextField,
   SimpleShowLayout,
-  EditButton,
   TextInput,
   SimpleForm,
   required,
-  Edit as EditComp,
 } from 'react-admin';
 
 import { SectionTitle } from '../helpers';
@@ -19,8 +17,10 @@ export const List = (props) => {
   return (
     <ListComp exporter={false} {...props}>
       <Datagrid rowClick="show">
-        <TextField source="description" />
-        <EditButton />
+        <TextField source="name" />
+        <TextField source="lastName" />
+        <TextField source="phone" />
+        <TextField source="email" />
       </Datagrid>
     </ListComp>
   );
@@ -30,7 +30,10 @@ export const Show = (props) => {
   return (
     <ShowComp title={<SectionTitle action="Benefit" />} {...props}>
       <SimpleShowLayout>
-        <TextField source="description" />
+        <TextField source="name" />
+        <TextField source="lastName" />
+        <TextField source="phone" />
+        <TextField source="email" />
       </SimpleShowLayout>
     </ShowComp>
   );
@@ -40,18 +43,11 @@ export const Create = (props) => {
   return (
     <CreateComponent props={props} redirect="list">
       <SimpleForm redirect="show">
-        <TextInput source="description" validate={required()} multiline />
+        <TextInput source="name" validate={required()} />
+        <TextInput source="lastName" validate={required()} />
+        <TextInput source="phone" validate={required()} />
+        <TextInput source="email" validate={required()} />
       </SimpleForm>
     </CreateComponent>
-  );
-};
-
-export const Edit = (props) => {
-  return (
-    <EditComp {...props} title={<SectionTitle action="Cabin" />}>
-      <SimpleForm redirect="show">
-        <TextInput source="description" validate={required()} multiline />
-      </SimpleForm>
-    </EditComp>
   );
 };

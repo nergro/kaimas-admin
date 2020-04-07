@@ -1,8 +1,15 @@
 import React from 'react';
 import { Admin, Resource } from 'react-admin';
 import dataProvider from 'Providers/dataProvider';
-import { Home, EventAvailable, ThumbUp, DirectionsRun } from '@material-ui/icons';
-import { cabin, availableDate, benefit, activity } from './pages';
+import {
+  Home,
+  EventAvailable,
+  ThumbUp,
+  DirectionsRun,
+  Category,
+  SupervisorAccount,
+} from '@material-ui/icons';
+import { cabin, availableDate, benefit, activity, activityCategory, manager } from './pages';
 
 const App = () => {
   return (
@@ -25,6 +32,7 @@ const App = () => {
       />
       <Resource
         name="availableDate"
+        options={{ label: 'Available Dates' }}
         icon={EventAvailable}
         list={availableDate.List}
         show={availableDate.Show}
@@ -38,6 +46,22 @@ const App = () => {
         show={benefit.Show}
         edit={benefit.Edit}
         create={benefit.Create}
+      />
+      <Resource
+        name="activityCategory"
+        options={{ label: 'Activity Categories' }}
+        icon={Category}
+        list={activityCategory.List}
+        show={activityCategory.Show}
+        edit={activityCategory.Edit}
+        create={activityCategory.Create}
+      />
+      <Resource
+        name="manager"
+        icon={SupervisorAccount}
+        list={manager.List}
+        show={manager.Show}
+        create={manager.Create}
       />
     </Admin>
   );

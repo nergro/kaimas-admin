@@ -19,6 +19,8 @@ import {
   DateField,
   ReferenceArrayInput,
   SelectArrayInput,
+  ReferenceInput,
+  ReferenceField,
 } from 'react-admin';
 
 import { SectionTitle } from '../helpers';
@@ -29,9 +31,11 @@ export const List = (props) => {
     <ListComp exporter={false} {...props}>
       <Datagrid rowClick="show">
         <TextField source="name" />
-        <TextField source="category" />
         <NumberField source="price" />
         <NumberField source="capacity" />
+        <ReferenceField label="Category" source="category" reference="activityCategory">
+          <TextField source="name" />
+        </ReferenceField>
         <EditButton />
       </Datagrid>
     </ListComp>
@@ -47,6 +51,9 @@ export const Show = (props) => {
         <TextField source="description" />
         <NumberField source="price" />
         <NumberField source="capacity" />
+        <ReferenceField label="Category" source="category" reference="activityCategory">
+          <TextField source="name" />
+        </ReferenceField>
         <ImageField source="images" src="url" title="desc" />
         <ReferenceArrayField label="" reference="availableDate" source="availableDates">
           <Datagrid rowClick="show">
@@ -68,18 +75,12 @@ export const Create = (props) => {
     <CreateComponent props={props} redirect="list">
       <SimpleForm redirect="show">
         <TextInput source="name" validate={required()} />
-        <SelectInput
-          source="category"
-          choices={[
-            { id: 'water', name: 'Water' },
-            { id: 'active', name: 'Active' },
-            { id: 'relax', name: 'Relax' },
-          ]}
-          validate={required()}
-        />
         <TextInput source="description" validate={required()} multiline />
         <NumberInput source="price" step={1} validate={required()} />
         <NumberInput source="capacity" step={1} validate={required()} />
+        <ReferenceInput label="Category" source="category" reference="activityCategory">
+          <SelectInput optionText="name" />
+        </ReferenceInput>
         <ImageInput source="images" label="Upload images" accept="image/*" multiple>
           <ImageField source="url" title="Images" />
         </ImageInput>
@@ -96,18 +97,12 @@ export const Edit = (props) => {
     <EditComp {...props} title={<SectionTitle action="Activity" />}>
       <SimpleForm redirect="show">
         <TextInput source="name" validate={required()} />
-        <SelectInput
-          source="category"
-          choices={[
-            { id: 'water', name: 'Water' },
-            { id: 'active', name: 'Active' },
-            { id: 'relax', name: 'Relax' },
-          ]}
-          validate={required()}
-        />
         <TextInput source="description" validate={required()} multiline />
         <NumberInput source="price" step={1} validate={required()} />
         <NumberInput source="capacity" step={1} validate={required()} />
+        <ReferenceInput label="Category" source="category" reference="activityCategory">
+          <SelectInput optionText="name" />
+        </ReferenceInput>
         <ImageInput source="images" label="Upload images" accept="image/*" multiple>
           <ImageField source="url" title="Images" />
         </ImageInput>
