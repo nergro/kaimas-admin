@@ -5,3 +5,4 @@ export { activity } from './activity';
 export { activityCategory } from './activityCategory';
 export { manager } from './manager';
 export { newsletter } from './newsletter';
+export { profile } from './profile';

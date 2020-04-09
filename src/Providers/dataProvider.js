@@ -6,6 +6,7 @@ import {
   activityCategory,
   manager,
   newsletter,
+  profile,
 } from './resources';
 
 const actions = async (type, resource, params) => {
@@ -30,6 +31,9 @@ const actions = async (type, resource, params) => {
     }
     case 'newsletter': {
       return newsletter(type, params, resource);
+    }
+    case 'profile': {
+      return profile(type, params, resource);
     }
     default:
       throw new Error(`Unsupported fetch action type ${type}`);

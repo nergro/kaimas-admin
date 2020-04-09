@@ -24,17 +24,22 @@ export default async (type, params) => {
     const localUserType = getUserProperty('userType');
 
     var config = {
-      headers: { Authorization: token },
+      headers: { Authorization: 'Bearer ' + token },
     };
     const {
       data: { id, userType },
     } = await axios.get(`/user/verify`, config);
 
-    return localUserId === id && localUserType === userType ? Promise.resolve() : Promise.reject();
+    if (localUserId === id && localUserType === userType) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      return Promise.resolve();
+    } else {
+      return Promise.reject();
+    }
   }
   if (type === AUTH_GET_PERMISSIONS) {
-    const permissions = getUserProperty('permissions');
-    return Promise.resolve(permissions);
+    const localUserType = getUserProperty('userType');
+    return Promise.resolve(localUserType);
   }
   return Promise.reject('Unknown method');
 };
