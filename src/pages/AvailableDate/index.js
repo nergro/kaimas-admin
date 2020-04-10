@@ -6,16 +6,12 @@ import {
   TextField,
   SimpleShowLayout,
   EditButton,
-  TextInput,
   SimpleForm,
-  NumberInput,
   required,
-  Edit as EditComp,
-  ImageField,
-  ImageInput,
   DateField,
   ReferenceInput,
   SelectInput,
+  DeleteButton,
 } from 'react-admin';
 
 import Select from 'react-select';
@@ -29,19 +25,20 @@ const StyledSelect = styled(Select)`
     z-index: 1000;
   }
 `;
-export const List = props => {
+export const List = (props) => {
   return (
     <ListComp exporter={false} {...props}>
       <Datagrid rowClick="show">
         <DateField source="date" />
         <TextField source="onModel" label="Service" />
         <EditButton />
+        <DeleteButton />
       </Datagrid>
     </ListComp>
   );
 };
 
-export const Show = props => {
+export const Show = (props) => {
   return (
     <ShowComp title={<SectionTitle action="AvailableDate" />} {...props}>
       <SimpleShowLayout>
@@ -52,7 +49,7 @@ export const Show = props => {
   );
 };
 
-export const Create = props => {
+export const Create = (props) => {
   const [selectedService, setSelectedService] = useState('cabin');
   const services = [
     { value: 'cabin', label: 'Cabin' },
@@ -76,7 +73,7 @@ export const Create = props => {
           classNamePrefix="service-selector"
           options={services}
           defaultValue={services[0]}
-          onChange={selected => setSelectedService(selected.value)}
+          onChange={(selected) => setSelectedService(selected.value)}
         />
         <p>Service</p>
         {selectedService === 'cabin' ? (
@@ -102,21 +99,5 @@ export const Create = props => {
         <DateSelect source="to" placeholder="Select date and time " title="To" initialDate={to} />
       </SimpleForm>
     </CreateComponent>
-  );
-};
-
-export const Edit = props => {
-  return (
-    <EditComp {...props} title={<SectionTitle action="Cabin" />}>
-      <SimpleForm redirect="show">
-        <TextInput source="name" validate={required()} />
-        <TextInput source="description" validate={required()} multiline />
-        <NumberInput source="price" step={1} validate={required()} />
-        <NumberInput source="capacity" step={1} validate={required()} />
-        <ImageInput source="images" label="Upload images" accept="image/*" multiple>
-          <ImageField source="url" title="Images" />
-        </ImageInput>
-      </SimpleForm>
-    </EditComp>
   );
 };

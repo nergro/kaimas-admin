@@ -64,7 +64,6 @@ const App = () => {
           icon={EventAvailable}
           list={availableDate.List}
           show={availableDate.Show}
-          edit={availableDate.Edit}
           create={availableDate.Create}
         />,
         <Resource

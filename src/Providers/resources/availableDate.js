@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { stringify } from 'query-string';
-import { DELETE, GET_LIST, GET_ONE, CREATE, UPDATE, DELETE_MANY, GET_MANY } from 'react-admin';
+import { DELETE, GET_LIST, GET_ONE, CREATE, DELETE_MANY, GET_MANY } from 'react-admin';
 import moment from 'moment';
 
 export const availableDate = async (type, params, resource) => {
@@ -85,31 +85,14 @@ export const availableDate = async (type, params, resource) => {
         throw new Error('Server error');
       }
     }
-    case UPDATE: {
-      try {
-        const { id, name, description, capacity, price } = params.data;
-
-        await axios.put(`/cabin/${id}`, {
-          name,
-          description,
-          capacity,
-          price,
-        });
-
-        return { data: params };
-      } catch (err) {
-        console.log(err);
-        throw new Error('Server error');
-      }
-    }
     case DELETE: {
       const { id } = params;
-      const { data } = await axios.delete(`/cabin/${id}`);
+      const { data } = await axios.delete(`/availabledate/${id}`);
       return { data };
     }
     case DELETE_MANY: {
       const { ids } = params;
-      await axios.delete(`/cabin`, { data: { ids } });
+      await axios.delete(`/availabledate`, { data: { ids } });
       return { data: ids };
     }
     default:
