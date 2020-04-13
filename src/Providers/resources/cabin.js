@@ -59,8 +59,10 @@ export const cabin = async (type, params, resource) => {
           images,
           availableDates,
           benefits,
+          thumbnail,
         },
       } = await axios.get(`/cabin/${params.id}`);
+
       return {
         data: {
           id,
@@ -73,6 +75,7 @@ export const cabin = async (type, params, resource) => {
           images: images.map((x) => ({ url: x.imageUrl, ...x })),
           availableDates,
           benefits,
+          thumbnail: { url: thumbnail.imageUrl, ...thumbnail },
         },
       };
     }
@@ -93,6 +96,7 @@ export const cabin = async (type, params, resource) => {
           price,
           images,
           benefits,
+          thumbnail,
         } = params.data;
 
         let uploadedImages = [];
@@ -106,6 +110,12 @@ export const cabin = async (type, params, resource) => {
             imageId: image.public_id,
           }));
         }
+        const uploadedThumbnailData = await uploadImage(getFormData(thumbnail.rawFile, 'cabins'));
+        const uploadedThumbnail = {
+          imageUrl: uploadedThumbnailData.secure_url,
+          imageId: uploadedThumbnailData.public_id,
+        };
+
         const { data } = await axios.post('/cabin', {
           nameLT,
           nameEN,
@@ -115,6 +125,7 @@ export const cabin = async (type, params, resource) => {
           price,
           images: uploadedImages,
           benefits,
+          thumbnail: uploadedThumbnail,
         });
 
         return { data };
@@ -137,6 +148,7 @@ export const cabin = async (type, params, resource) => {
           price,
           images,
           benefits,
+          thumbnail,
         } = params.data;
         let uploadedImages = [];
         let mappedOld = [];
@@ -159,6 +171,12 @@ export const cabin = async (type, params, resource) => {
           }));
         }
 
+        const uploadedThumbnailData = await uploadImage(getFormData(thumbnail.rawFile, 'cabins'));
+        const uploadedThumbnail = {
+          imageUrl: uploadedThumbnailData.secure_url,
+          imageId: uploadedThumbnailData.public_id,
+        };
+
         await axios.put(`/cabin/${id}`, {
           nameLT,
           nameEN,
@@ -168,6 +186,7 @@ export const cabin = async (type, params, resource) => {
           price,
           images: [...mappedOld, ...uploadedImages],
           benefits,
+          thumbnail: uploadedThumbnail,
         });
 
         return { data: params };

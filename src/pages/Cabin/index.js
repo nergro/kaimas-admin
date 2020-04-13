@@ -46,6 +46,7 @@ export const Show = (props) => {
         <TextField source="descriptionEN" label="Description EN" />
         <NumberField source="price" />
         <NumberField source="capacity" />
+        <ImageField source="thumbnail" src="url" title="desc" />
         <ImageField source="images" src="url" title="desc" />
         <ReferenceArrayField label="" reference="availableDate" source="availableDates">
           <Datagrid rowClick="show">
@@ -72,6 +73,14 @@ export const Create = (props) => {
         <TextInput source="descriptionEN" label="Description EN" validate={required()} multiline />
         <NumberInput source="price" step={1} validate={required()} />
         <NumberInput source="capacity" step={1} validate={required()} />
+        <ImageInput
+          source="thumbnail"
+          label="Upload thumbnail"
+          accept="image/*"
+          validate={required()}
+        >
+          <ImageField source="url" title="Images" />
+        </ImageInput>
         <ImageInput source="images" label="Upload images" accept="image/*" multiple>
           <ImageField source="url" title="Images" />
         </ImageInput>
@@ -93,6 +102,14 @@ export const Edit = (props) => {
         <TextInput source="descriptionEN" label="Description EN" validate={required()} multiline />
         <NumberInput source="price" step={1} validate={required()} />
         <NumberInput source="capacity" step={1} validate={required()} />
+        <ImageInput
+          source="thumbnail"
+          label="Upload thumbnail"
+          accept="image/*"
+          validate={required()}
+        >
+          <ImageField source="url" title="Images" />
+        </ImageInput>
         <ImageInput source="images" label="Upload images" accept="image/*" multiple>
           <ImageField source="url" title="Images" />
         </ImageInput>
