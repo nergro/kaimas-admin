@@ -3,11 +3,13 @@ import { stringify } from 'query-string';
 import { DELETE, GET_LIST, GET_ONE, CREATE, UPDATE, DELETE_MANY, GET_MANY } from 'react-admin';
 
 const uploadImage = (formData) =>
-  axios.post('https://api.cloudinary.com/v1_1/dmckzsz3u/image/upload', formData, {
+  fetch('https://api.cloudinary.com/v1_1/dmckzsz3u/image/upload', {
+    method: 'POST',
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
     },
-  });
+    body: formData,
+  }).then((x) => x.json());
 
 const getFormData = (image, location) => {
   const formData = new FormData();
@@ -48,9 +50,11 @@ export const activity = async (type, params, resource) => {
       const {
         data: {
           id,
-          name,
+          nameLT,
+          nameEN,
           category,
-          description,
+          descriptionLT,
+          descriptionEN,
           capacity,
           price,
           images,
@@ -62,9 +66,11 @@ export const activity = async (type, params, resource) => {
       return {
         data: {
           id,
-          name,
+          nameLT,
+          nameEN,
           category,
-          description,
+          descriptionLT,
+          descriptionEN,
           capacity,
           price,
           images: images.map((x) => ({ url: x.imageUrl, ...x })),
@@ -81,7 +87,17 @@ export const activity = async (type, params, resource) => {
     }
     case CREATE: {
       try {
-        const { name, category, description, capacity, price, images, benefits } = params.data;
+        const {
+          nameLT,
+          nameEN,
+          category,
+          descriptionLT,
+          descriptionEN,
+          capacity,
+          price,
+          images,
+          benefits,
+        } = params.data;
         let uploadedImages = [];
         if (images) {
           const uploadedImagesData = await Promise.all(
@@ -89,14 +105,16 @@ export const activity = async (type, params, resource) => {
           );
 
           uploadedImages = uploadedImagesData.map((image) => ({
-            imageUrl: image.data.secure_url,
-            imageId: image.data.public_id,
+            imageUrl: image.secure_url,
+            imageId: image.public_id,
           }));
         }
         const { data } = await axios.post('/activity', {
-          name,
+          nameLT,
+          nameEN,
           category,
-          description,
+          descriptionLT,
+          descriptionEN,
           capacity,
           price,
           images: uploadedImages,
@@ -113,7 +131,18 @@ export const activity = async (type, params, resource) => {
     }
     case UPDATE: {
       try {
-        const { id, name, category, description, capacity, price, images, benefits } = params.data;
+        const {
+          id,
+          nameLT,
+          nameEN,
+          category,
+          descriptionLT,
+          descriptionEN,
+          capacity,
+          price,
+          images,
+          benefits,
+        } = params.data;
         let uploadedImages = [];
         let mappedOld = [];
         if (images) {
@@ -130,15 +159,17 @@ export const activity = async (type, params, resource) => {
           );
 
           uploadedImages = uploadedImagesData.map((image) => ({
-            imageUrl: image.data.secure_url,
-            imageId: image.data.public_id,
+            imageUrl: image.secure_url,
+            imageId: image.public_id,
           }));
         }
 
         await axios.put(`/activity/${id}`, {
-          name,
+          nameLT,
+          nameEN,
           category,
-          description,
+          descriptionLT,
+          descriptionEN,
           capacity,
           price,
           images: [...mappedOld, ...uploadedImages],

@@ -27,7 +27,7 @@ export const List = (props) => {
   return (
     <ListComp exporter={false} {...props}>
       <Datagrid rowClick="show">
-        <TextField source="name" />
+        <TextField source="nameEN" label="Name" />
         <NumberField source="price" />
         <NumberField source="capacity" />
         <EditButton />
@@ -40,8 +40,10 @@ export const Show = (props) => {
   return (
     <ShowComp title={<SectionTitle action="Cabin" />} {...props}>
       <SimpleShowLayout>
-        <TextField source="name" />
-        <TextField source="description" />
+        <TextField source="nameLT" label="Name LT" />
+        <TextField source="nameEN" label="Name LT" />
+        <TextField source="descriptionEN" label="Description LT" />
+        <TextField source="descriptionEN" label="Description EN" />
         <NumberField source="price" />
         <NumberField source="capacity" />
         <ImageField source="images" src="url" title="desc" />
@@ -52,7 +54,7 @@ export const Show = (props) => {
         </ReferenceArrayField>
         <ReferenceArrayField label="" reference="benefit" source="benefits">
           <Datagrid rowClick="show">
-            <TextField source="description" label="Benefits" />
+            <TextField source="descriptionEN" label="Benefits" />
           </Datagrid>
         </ReferenceArrayField>
       </SimpleShowLayout>
@@ -64,15 +66,17 @@ export const Create = (props) => {
   return (
     <CreateComponent props={props} redirect="list">
       <SimpleForm redirect="show">
-        <TextInput source="name" validate={required()} />
-        <TextInput source="description" validate={required()} multiline />
+        <TextInput source="nameLT" label="Name LT" validate={required()} />
+        <TextInput source="nameEN" label="Name EN" validate={required()} />
+        <TextInput source="descriptionLT" label="Description LT" validate={required()} multiline />
+        <TextInput source="descriptionEN" label="Description EN" validate={required()} multiline />
         <NumberInput source="price" step={1} validate={required()} />
         <NumberInput source="capacity" step={1} validate={required()} />
         <ImageInput source="images" label="Upload images" accept="image/*" multiple>
           <ImageField source="url" title="Images" />
         </ImageInput>
         <ReferenceArrayInput label="Benefits" source="benefits" reference="benefit">
-          <SelectArrayInput optionText="description" />
+          <SelectArrayInput optionText="descriptionEN" />
         </ReferenceArrayInput>
       </SimpleForm>
     </CreateComponent>
@@ -83,15 +87,17 @@ export const Edit = (props) => {
   return (
     <EditComp {...props} title={<SectionTitle action="Cabin" />}>
       <SimpleForm redirect="show">
-        <TextInput source="name" validate={required()} />
-        <TextInput source="description" validate={required()} multiline />
+        <TextInput source="nameLT" label="Name LT" validate={required()} />
+        <TextInput source="nameEN" label="Name EN" validate={required()} />
+        <TextInput source="descriptionLT" label="Description LT" validate={required()} multiline />
+        <TextInput source="descriptionEN" label="Description EN" validate={required()} multiline />
         <NumberInput source="price" step={1} validate={required()} />
         <NumberInput source="capacity" step={1} validate={required()} />
         <ImageInput source="images" label="Upload images" accept="image/*" multiple>
           <ImageField source="url" title="Images" />
         </ImageInput>
         <ReferenceArrayInput label="Benefits" source="benefits" reference="benefit">
-          <SelectArrayInput optionText="description" />
+          <SelectArrayInput optionText="descriptionEN" />
         </ReferenceArrayInput>
       </SimpleForm>
     </EditComp>

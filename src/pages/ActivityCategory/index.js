@@ -19,7 +19,7 @@ export const List = (props) => {
   return (
     <ListComp exporter={false} {...props}>
       <Datagrid rowClick="show">
-        <TextField source="name" />
+        <TextField source="nameEN" label="Name EN" />
         <EditButton />
       </Datagrid>
     </ListComp>
@@ -30,7 +30,8 @@ export const Show = (props) => {
   return (
     <ShowComp title={<SectionTitle action="Activity category" />} {...props}>
       <SimpleShowLayout>
-        <TextField source="name" />
+        <TextField source="nameLT" label="Name LT" />
+        <TextField source="nameEN" label="Name EN" />
       </SimpleShowLayout>
     </ShowComp>
   );
@@ -40,7 +41,8 @@ export const Create = (props) => {
   return (
     <CreateComponent props={props} redirect="list">
       <SimpleForm redirect="show">
-        <TextInput source="name" validate={required()} />
+        <TextInput source="nameLT" label="Name LT" validate={required()} />
+        <TextInput source="nameEN" label="Name EN" validate={required()} />
       </SimpleForm>
     </CreateComponent>
   );
@@ -50,7 +52,8 @@ export const Edit = (props) => {
   return (
     <EditComp {...props} title={<SectionTitle action="Cabin" />}>
       <SimpleForm redirect="show">
-        <TextInput source="name" validate={required()} />
+        <TextInput source="nameLT" label="Name LT" validate={required()} />
+        <TextInput source="nameEN" label="Name EN" validate={required()} />
       </SimpleForm>
     </EditComp>
   );

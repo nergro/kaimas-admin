@@ -26,11 +26,11 @@ export const activityCategory = async (type, params, resource) => {
     }
     case GET_ONE: {
       const {
-        data: { id, name },
+        data: { id, nameLT, nameEN },
       } = await axios.get(`/activitycategory/${params.id}`);
 
       return {
-        data: { id, name },
+        data: { id, nameLT, nameEN },
       };
     }
     case GET_MANY: {
@@ -41,10 +41,11 @@ export const activityCategory = async (type, params, resource) => {
     }
     case CREATE: {
       try {
-        const { name } = params.data;
+        const { nameLT, nameEN } = params.data;
 
         const { data } = await axios.post('/activitycategory', {
-          name,
+          nameLT,
+          nameEN,
         });
 
         return { data };
@@ -57,10 +58,11 @@ export const activityCategory = async (type, params, resource) => {
     }
     case UPDATE: {
       try {
-        const { id, name } = params.data;
+        const { id, nameLT, nameEN } = params.data;
 
         await axios.put(`/activitycategory/${id}`, {
-          name,
+          nameLT,
+          nameEN,
         });
 
         return { data: params };
