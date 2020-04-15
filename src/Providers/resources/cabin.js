@@ -113,6 +113,7 @@ export const cabin = async (type, params, resource) => {
             imageId: image.public_id,
           }));
         }
+
         const uploadedThumbnailData = await uploadImage(getFormData(thumbnail.rawFile, 'cabins'));
         const uploadedThumbnail = {
           imageUrl: uploadedThumbnailData.secure_url,
@@ -155,6 +156,8 @@ export const cabin = async (type, params, resource) => {
           benefits,
           thumbnail,
         } = params.data;
+        console.log(thumbnail);
+
         let uploadedImages = [];
         let mappedOld = [];
         if (images) {
@@ -176,11 +179,20 @@ export const cabin = async (type, params, resource) => {
           }));
         }
 
-        const uploadedThumbnailData = await uploadImage(getFormData(thumbnail.rawFile, 'cabins'));
-        const uploadedThumbnail = {
-          imageUrl: uploadedThumbnailData.secure_url,
-          imageId: uploadedThumbnailData.public_id,
-        };
+        let uploadedThumbnail = {};
+
+        if (thumbnail.rawFile) {
+          const uploadedThumbnailData = await uploadImage(getFormData(thumbnail.rawFile, 'cabins'));
+          uploadedThumbnail = {
+            imageUrl: uploadedThumbnailData.secure_url,
+            imageId: uploadedThumbnailData.public_id,
+          };
+        } else {
+          uploadedThumbnail = {
+            imageUrl: thumbnail.imageUrl,
+            imageId: thumbnail.imageId,
+          };
+        }
 
         await axios.put(`/cabin/${id}`, {
           nameLT,
@@ -197,6 +209,7 @@ export const cabin = async (type, params, resource) => {
 
         return { data: params };
       } catch (err) {
+        console.log(err);
         throw new Error('Server error');
       }
     }

@@ -33,16 +33,16 @@ const Image = styled.img`
 `;
 
 export const MultiImageField = ({ source, record = {}, label }) => {
-  console.log(record[source]);
   return (
     <Wrapper>
       <Title>{label || source}</Title>
       <Images>
-        {record[source].map((image) => (
-          <ImageWrapper key={image.imageId}>
-            <Image src={image.url} />
-          </ImageWrapper>
-        ))}
+        {record[source] &&
+          record[source].map((image) => (
+            <ImageWrapper key={image.imageId}>
+              <Image src={image.url} />
+            </ImageWrapper>
+          ))}
       </Images>
     </Wrapper>
   );
