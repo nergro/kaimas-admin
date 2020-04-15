@@ -60,7 +60,6 @@ export const availableDate = async (type, params, resource) => {
 
         const duration = moment.duration(end.diff(start));
         const days = Math.round(duration.asDays());
-        console.log(days);
 
         const dateChunks = [];
 

@@ -19,6 +19,8 @@ import {
   ReferenceArrayInput,
   SelectArrayInput,
 } from 'react-admin';
+import { MultiTextField } from 'Components/MultiTextField';
+import { MultiImageField } from 'Components/MultiImageField';
 
 import { SectionTitle } from '../helpers';
 import { CreateComponent } from 'Components/CreateForm';
@@ -30,6 +32,7 @@ export const List = (props) => {
         <TextField source="nameEN" label="Name" />
         <NumberField source="price" />
         <NumberField source="capacity" />
+        <TextField source="address" />
         <EditButton />
       </Datagrid>
     </ListComp>
@@ -42,12 +45,13 @@ export const Show = (props) => {
       <SimpleShowLayout>
         <TextField source="nameLT" label="Name LT" />
         <TextField source="nameEN" label="Name LT" />
-        <TextField source="descriptionEN" label="Description LT" />
-        <TextField source="descriptionEN" label="Description EN" />
+        <MultiTextField source="descriptionLT" label="Description LT" />
+        <MultiTextField source="descriptionEN" label="Description EN" />
         <NumberField source="price" />
         <NumberField source="capacity" />
-        <ImageField source="thumbnail" src="url" title="desc" />
-        <ImageField source="images" src="url" title="desc" />
+        <TextField source="address" />
+        <ImageField source="thumbnail.url" title="thumbnail" label="Thumbnail" />
+        <MultiImageField source="images" src="url" label="Images" />
         <ReferenceArrayField label="" reference="availableDate" source="availableDates">
           <Datagrid rowClick="show">
             <DateField source="date" label="Available dates" locales="lt-LT" />
@@ -73,6 +77,7 @@ export const Create = (props) => {
         <TextInput source="descriptionEN" label="Description EN" validate={required()} multiline />
         <NumberInput source="price" step={1} validate={required()} />
         <NumberInput source="capacity" step={1} validate={required()} />
+        <TextInput source="address" validate={required()} />
         <ImageInput
           source="thumbnail"
           label="Upload thumbnail"
@@ -102,6 +107,7 @@ export const Edit = (props) => {
         <TextInput source="descriptionEN" label="Description EN" validate={required()} multiline />
         <NumberInput source="price" step={1} validate={required()} />
         <NumberInput source="capacity" step={1} validate={required()} />
+        <TextInput source="address" validate={required()} />
         <ImageInput
           source="thumbnail"
           label="Upload thumbnail"
