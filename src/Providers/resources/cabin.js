@@ -156,7 +156,6 @@ export const cabin = async (type, params, resource) => {
           benefits,
           thumbnail,
         } = params.data;
-        console.log(thumbnail);
 
         let uploadedImages = [];
         let mappedOld = [];

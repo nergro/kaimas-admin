@@ -182,13 +182,22 @@ export const activity = async (type, params, resource) => {
           }));
         }
 
-        const uploadedThumbnailData = await uploadImage(
-          getFormData(thumbnail.rawFile, 'activities')
-        );
-        const uploadedThumbnail = {
-          imageUrl: uploadedThumbnailData.secure_url,
-          imageId: uploadedThumbnailData.public_id,
-        };
+        let uploadedThumbnail = {};
+
+        if (thumbnail.rawFile) {
+          const uploadedThumbnailData = await uploadImage(
+            getFormData(thumbnail.rawFile, 'activities')
+          );
+          uploadedThumbnail = {
+            imageUrl: uploadedThumbnailData.secure_url,
+            imageId: uploadedThumbnailData.public_id,
+          };
+        } else {
+          uploadedThumbnail = {
+            imageUrl: thumbnail.imageUrl,
+            imageId: thumbnail.imageId,
+          };
+        }
 
         await axios.put(`/activity/${id}`, {
           nameLT,
