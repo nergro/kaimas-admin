@@ -13,6 +13,7 @@ import {
   SelectInput,
   DeleteButton,
 } from 'react-admin';
+import moment from 'moment';
 
 import Select from 'react-select';
 import { SectionTitle } from '../helpers';
@@ -49,6 +50,21 @@ export const Show = (props) => {
   );
 };
 
+export const validateDates = (values) => {
+  const errors = {};
+  const { from, to } = values;
+  if (!(moment(from).format('YYYY-MM-DD') < moment(to).format('YYYY-MM-DD'))) {
+    errors.to = ['To date must be later than from'];
+  }
+  if (!from) {
+    errors.from = ['Please choose day'];
+  }
+  if (!to) {
+    errors.to = ['Please choose day'];
+  }
+  return errors;
+};
+
 export const Create = (props) => {
   const [selectedService, setSelectedService] = useState('cabin');
   const services = [
@@ -67,7 +83,7 @@ export const Create = (props) => {
 
   return (
     <CreateComponent props={props} redirect="list">
-      <SimpleForm redirect="show">
+      <SimpleForm redirect="show" validate={validateDates}>
         <p>Service Type</p>
         <StyledSelect
           classNamePrefix="service-selector"
@@ -78,7 +94,7 @@ export const Create = (props) => {
         <p>Service</p>
         {selectedService === 'cabin' ? (
           <ReferenceInput label="Cabin" source="cabin" reference="cabin" validate={[required()]}>
-            <SelectInput optionText="name" />
+            <SelectInput optionText="nameEN" />
           </ReferenceInput>
         ) : (
           <ReferenceInput
@@ -87,7 +103,7 @@ export const Create = (props) => {
             reference="activity"
             validate={[required()]}
           >
-            <SelectInput optionText="name" />
+            <SelectInput optionText="nameEN" />
           </ReferenceInput>
         )}
         <DateSelect

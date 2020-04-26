@@ -65,7 +65,7 @@ export const availableDate = async (type, params, resource) => {
 
         const day = 60 * 60 * 24 * 1000;
 
-        for (let i = 0; i < days; i++) {
+        for (let i = 0; i <= days; i++) {
           dateChunks.push(new Date(from.getTime() + day * i));
         }
 
