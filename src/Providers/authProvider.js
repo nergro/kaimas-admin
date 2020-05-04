@@ -14,9 +14,7 @@ export default async (type, params) => {
     return Promise.resolve();
   }
   if (type === AUTH_ERROR) {
-    // make this reject in production (probably) and uncomment removeLocalUser
-    // removeLocalUser();
-    return Promise.resolve();
+    return Promise.reject();
   }
   if (type === AUTH_CHECK) {
     const token = getUserProperty('token');
@@ -26,14 +24,21 @@ export default async (type, params) => {
     var config = {
       headers: { Authorization: 'Bearer ' + token },
     };
-    const {
-      data: { id, userType },
-    } = await axios.get(`/user/verify`, config);
-
-    if (localUserId === id && localUserType === userType) {
+    if (!token || !localUserId || !localUserType) {
+      return Promise.reject();
+    }
+    try {
+      const {
+        data: { id, userType },
+      } = await axios.get(`/user/verify`, config);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      return Promise.resolve();
-    } else {
+      if (localUserId === id && localUserType === userType) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        return Promise.resolve();
+      } else {
+        return Promise.reject();
+      }
+    } catch (error) {
       return Promise.reject();
     }
   }

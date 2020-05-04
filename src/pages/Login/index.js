@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import * as Yup from 'yup';
 import { connect } from 'react-redux';
-import { userLogin } from 'react-admin';
+import { userLogin, Notification } from 'react-admin';
 import Wrapper from 'Components/Auth/AuthLayout';
 import LoginForm from 'Components/Auth/LoginForm';
 import { setLocalUser } from 'Helpers/localUser';
@@ -32,13 +32,16 @@ class Login extends Component {
       password: Yup.string().required(),
     });
     return (
-      <Wrapper title="Login">
-        <LoginForm
-          initialValues={{ email: '', password: '' }}
-          onSubmit={this.submit}
-          validationSchema={schema}
-        />
-      </Wrapper>
+      <>
+        <Wrapper title="Login">
+          <LoginForm
+            initialValues={{ email: '', password: '' }}
+            onSubmit={this.submit}
+            validationSchema={schema}
+          />
+        </Wrapper>
+        <Notification />
+      </>
     );
   }
 }
