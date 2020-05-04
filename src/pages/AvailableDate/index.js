@@ -20,6 +20,7 @@ import { SectionTitle } from '../helpers';
 import { CreateComponent } from 'Components/CreateForm';
 import styled from 'styled-components';
 import { DateSelect } from 'Components/DateSelect';
+import { DateServiceField } from 'Components/DateServiceField';
 
 const StyledSelect = styled(Select)`
   .service-selector__menu {
@@ -32,6 +33,7 @@ export const List = (props) => {
       <Datagrid rowClick="show">
         <DateField source="date" />
         <TextField source="onModel" label="Service" />
+        <DateServiceField source="onModel" label="Service Name" />
         <EditButton />
         <DeleteButton />
       </Datagrid>
@@ -45,6 +47,7 @@ export const Show = (props) => {
       <SimpleShowLayout>
         <DateField source="date" />
         <TextField source="onModel" label="Service" />
+        <DateServiceField source="onModel" label="Service Name" showTitle />
       </SimpleShowLayout>
     </ShowComp>
   );

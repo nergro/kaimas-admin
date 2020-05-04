@@ -75,7 +75,7 @@ export const availableDate = async (type, params, resource) => {
           serviceId,
         });
 
-        return { data };
+        return { data: data[0] };
       } catch (error) {
         console.log(error);
         if (error.response) {

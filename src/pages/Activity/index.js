@@ -102,7 +102,7 @@ export const Create = (props) => {
           <ImageField source="url" title="Images" />
         </ImageInput>
         <ReferenceArrayInput label="Benefits" source="benefits" reference="benefit">
-          <SelectArrayInput optionText="description" />
+          <SelectArrayInput optionText="descriptionEN" />
         </ReferenceArrayInput>
       </SimpleForm>
     </CreateComponent>

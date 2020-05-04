@@ -14,7 +14,7 @@ export default async (type, params) => {
     return Promise.resolve();
   }
   if (type === AUTH_ERROR) {
-    return Promise.reject();
+    return Promise.resolve();
   }
   if (type === AUTH_CHECK) {
     const token = getUserProperty('token');
