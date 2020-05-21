@@ -67,7 +67,6 @@ export const benefit = async (type, params, resource) => {
 
         return { data: params };
       } catch (err) {
-        console.log(err);
         throw new Error('Server error');
       }
     }

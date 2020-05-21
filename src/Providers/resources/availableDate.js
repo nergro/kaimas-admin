@@ -77,7 +77,6 @@ export const availableDate = async (type, params, resource) => {
 
         return { data: data[0] };
       } catch (error) {
-        console.log(error);
         if (error.response) {
           throw new Error(error.response.data.error);
         }

@@ -208,7 +208,6 @@ export const cabin = async (type, params, resource) => {
 
         return { data: params };
       } catch (err) {
-        console.log(err);
         throw new Error('Server error');
       }
     }
